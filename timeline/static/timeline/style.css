@@ -1,0 +1,15 @@
+#tietoevry-logo {
+    width: 150px;
+    float: right;
+    margin-top: -45px;
+}
+
+.jenkins-link {
+    color: #c3c3c3;
+    text-decoration: none;
+}
+
+.jenkins-link:hover {
+    color: #a5a5a5;
+    text-decoration: none;
+}

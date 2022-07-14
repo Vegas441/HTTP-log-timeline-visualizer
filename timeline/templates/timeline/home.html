@@ -1,13 +1,13 @@
 {% extends "timeline/base.html" %}
+{% load static %}
 
 {% block content %}
 
-
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron">
+    <a href="https://www.tietoevry.com/"><img id="tietoevry-logo" src="{% static 'timeline/tietoevry.png' %}" alt="Tietoevry"></a>
     <div class="container">
         <h1>Tietoevry - HTTP Log Timeline Visualizer</h1>
-        <!-- <img src="assets/tietoevry.png" alt="Tietoevry"> -->
-        <h3 style="color: #c3c3c3;">Jenkins log generator</h3>
+        <h3 style="color: #c3c3c3;"> <a class="jenkins-link" href="http://10.14.222.120:50088/">Jenkins</a> log generator</h3>
         <hr>
 
         
