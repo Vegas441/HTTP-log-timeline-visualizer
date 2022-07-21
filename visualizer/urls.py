@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from timeline import views
 
 import timeline
 
@@ -22,3 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('timeline.urls')),
 ]
+
+handler404 = 'timeline.views.not_found_handler'

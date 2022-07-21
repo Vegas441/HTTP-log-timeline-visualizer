@@ -23,3 +23,7 @@ def log(request):
         'slave_hostname': 'slave_1'
     }
     return render(request, 'timeline/log.html', context)
+
+
+def not_found_handler(request, exception):
+    return render(request, 'timeline/404.html')
