@@ -18,6 +18,7 @@
     </div>
 </div>
 
+
 <div class="container">
     <!-- For loop -->
         <div class="card bg-dark text-white">
@@ -34,28 +35,30 @@
                     <!-- For loop -->
 
                     <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.523+01:00</p>
-                        </div>
+                            <div class="timeline-content">
+                                <a href="{% url 'timeline-log' %}"><div class="inner-circle"></div></a>    <!-- Popup example --> 
+                                <a href="#" data-toggle="popover" data-html="true" title="{{ time }}" data-content="{{ hostname }} <br/> restLogger: {{ restLogger }} <br/> <br/> {{ type }}: {{ status_code }} <br/> <br/> hostname: {{ slave_hostname }} <br/> ip: {{ ip }} <br/> result: {{ result }} <br/> role: {{ role }}">
+                                    <p class="h6 mt-3 mb-1">{{ time }}</p>
+                                </a>
+                            </div>
                     </div>
 
                     <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
+                        <div class="timeline-content">
                             <div class="inner-circle"></div>
                             <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.531+01:00</p>
                         </div>
                     </div>
 
                     <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
+                        <div class="timeline-content">
                             <div class="inner-circle"></div>
                             <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.534+01:00</p>
                         </div>
                     </div>
 
                     <div class="timeline-step step mb-0">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
+                        <div class="timeline-content">
                             <div class="inner-circle"></div>
                             <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.538+01:00</p>
                         </div>
