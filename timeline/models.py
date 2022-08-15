@@ -1,7 +1,6 @@
 from django.db import models
 from django.forms import IntegerField
 from django.utils.translation import gettext_lazy as _
-#from django.utils import timezone
 
 # Create your models here.
 

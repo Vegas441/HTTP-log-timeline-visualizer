@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf.urls.static import static
-from .models import Timeline
+from .models import *
 
 
 example_ctx = {
@@ -19,7 +19,10 @@ example_ctx = {
 # Create your views here.
 def home(request):
     # Will be pulled from database
-    context = example_ctx
+    context = {
+        'timelines': Timeline.objects.all(),
+        'logs': Log.objects.all()
+    }
     return render(request, 'timeline/home.html', context)
 
 def log(request):
