@@ -21,22 +21,38 @@
 
 <div class="container">
     <!-- For loop -->
+    {% for timeline in timelines %}
         <div class="card bg-dark text-white">
             <div class="card-body">
-                {{ ip }}
+                {{ timeline.IP }}
             </div>
         </div>
 
-        <!-- Timeline example {delete later} -->
+        
+        
         <div class="row">
             <div class="col">
                 <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
 
-                    <!-- For loop -->
+                    {% for log in logs %}
 
+                    {% if log.timeline.IP  ==  timeline.IP %}
+                        <div class="timeline-step">
+                            <div class="timeline-content">
+                                <a href="{% url 'timeline-log' %}"><div class="inner-circle"></div></a>
+                                <a href="#" data-toggle="popover" data-html="true" title="{{ time }}" data-content="{{ hostname }} <br/> restLogger: {{ restLogger }} <br/> <br/> {{ type }}: {{ status_code }} <br/> <br/> hostname: {{ slave_hostname }} <br/> ip: {{ ip }} <br/> result: {{ result }} <br/> role: {{ role }}">
+                                    <p class="h6 mt-3 mb-1">{{ log.dateTime }}</p>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% endfor %}
+
+                    <!--
                     <div class="timeline-step">
                             <div class="timeline-content">
-                                <a href="{% url 'timeline-log' %}"><div class="inner-circle"></div></a>    <!-- Popup example --> 
+                                <a href="{% url 'timeline-log' %}"><div class="inner-circle"></div></a>
                                 <a href="#" data-toggle="popover" data-html="true" title="{{ time }}" data-content="{{ hostname }} <br/> restLogger: {{ restLogger }} <br/> <br/> {{ type }}: {{ status_code }} <br/> <br/> hostname: {{ slave_hostname }} <br/> ip: {{ ip }} <br/> result: {{ result }} <br/> role: {{ role }}">
                                     <p class="h6 mt-3 mb-1">{{ time }}</p>
                                 </a>
@@ -63,14 +79,15 @@
                             <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.538+01:00</p>
                         </div>
                     </div>
-
-                    <!-- End loop -->
+                    
+                    -->
 
                 </div>
             </div>
         </div>
-
+    
     <!-- End loop -->
+    {% endfor %}
 </div>
 
 {% endblock content %}
