@@ -21,13 +21,19 @@ def home(request):
     # Will be pulled from database
     context = {
         'timelines': Timeline.objects.all(),
-        'logs': Log.objects.all()
+        'logs': Log.objects.all(),
+        'datas': Data.objects.all(),
+        'requests': Request.objects.all()
     }
     return render(request, 'timeline/home.html', context)
 
-def log(request):
+def log(request, id):   #TODO: rozbehni 
     # Will be pulled from database
-    context = example_ctx
+    context = {
+        'log': Log.objects.filter(ID=id).first(),
+        'requests': Request.objects.all(),
+        'datas': Data.objects.all(),
+    }
     return render(request, 'timeline/log.html', context)
 
 

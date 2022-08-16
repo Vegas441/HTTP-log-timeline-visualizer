@@ -29,8 +29,8 @@ class Request(models.Model):
 
     ID = models.IntegerField(primary_key=True)
     requestType = models.CharField(max_length=4, choices=requestType_T.choices) #GET/POST
-    params = models.CharField(max_length=64)
     URL = models.CharField(max_length=256)
+    params = models.CharField(max_length=64)
 
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
 

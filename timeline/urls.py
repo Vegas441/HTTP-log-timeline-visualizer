@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='timeline-home'),
-    path('log/', views.log, name='timeline-log'),
+    path('log/<int:ID>/', views.log, name='timeline-log'),
 ]
