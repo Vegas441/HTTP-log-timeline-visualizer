@@ -44,7 +44,7 @@
                                     {% for data in datas %}
                                         {% if data.log.ID == log.ID %}
                                             <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
-                                            <a href="#" data-toggle="popover" data-html="true" title="{{ log.dateTime }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}">
+                                            <a href="#" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}">
                                                 <p class="h6 mt-3 mb-1">{{ log.dateTime|date:'Y-m-d H:i:s' }}</p>
                                             </a>
                                         {% endif %}
@@ -55,7 +55,7 @@
                                     {% for request in requests %}
                                         {% if request.log.ID == log.ID %}
                                             <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
-                                            <a href="#" data-toggle="popover" data-html="true" title="{{ log.dateTime }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ request.requestType }} <br/> <br/> request: <br/> {{ request.URL }} <br/> {{ request.params }}">
+                                            <a href="#" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ request.requestType }} <br/> <br/> request: <br/> {{ request.URL }} <br/> {{ request.params }}">
                                                 <p class="h6 mt-3 mb-1">{{ log.dateTime|date:'Y-m-d H:i:s' }}</p>
                                             </a>
                                         {% endif %}
