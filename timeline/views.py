@@ -31,7 +31,7 @@ def log(request, id):   #TODO: rozbehni
     # Will be pulled from database
     context = {
         'log': Log.objects.filter(ID=id).first(),
-        'requests': Request.objects.all(),
+        'requests': Request.objects.filter().all(),
         'datas': Data.objects.all(),
     }
     return render(request, 'timeline/log.html', context)
