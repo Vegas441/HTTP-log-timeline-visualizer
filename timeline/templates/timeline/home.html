@@ -23,9 +23,11 @@
     <!-- For loop -->
     {% for timeline in timelines %}
         <div class="card bg-dark text-white">
-            <div class="card-body">
-                {{ timeline.IP }}
-            </div>
+            <a style="color: white" href="{% url 'timeline-tm' timeline.IP %}">
+                <div class="card-body">
+                    {{ timeline.IP }}
+                </div>
+            </a>
         </div>
 
         
