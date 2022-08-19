@@ -1,7 +1,67 @@
 {% extends "timeline/base.html" %}
-{% load static %}
-
 {% block content %}
+
+
+<!-- This is here because static doesnt work on certain classes for some reason 
+    and i would rather kill myself than spend 1 more second resolving it -->
+<style>
+/*
+ * Classes for timeline on timeline page
+ *
+ */
+
+a:hover {
+    text-decoration: none;
+}
+
+ /* Timeline Container */
+.timeline {
+    background: #fff;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* Outer Layer with the timeline border */
+.outer {
+    border-left: 2px solid #333
+}
+
+/* Card container */
+.card {
+    position: relative;
+    margin: 0 0 20px 20px;
+    padding: 10px;
+    background: #333;
+    color: white;
+    border-radius: 8px;
+    max-width: 400px;
+}
+
+/* Information about the timeline */
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Title of the card */
+.title {
+    color: #3b82f6;
+    position: relative;
+}
+
+/* Timeline dot  */
+.title::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 999px;
+    left: -39px;
+    border: 3px solid #3b82f6;
+}
+</style>
 
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
@@ -9,9 +69,42 @@
     </div>
 </div>
 
-{% for log in logs %}
-    
+<div class="timeline">
+    <div class="outer">
+        {% for log in logs %}
+        <a href="{% url 'timeline-log' log.ID %}">
+            <div class="card">
+                <div class="info">
+                <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s' }}</h3>
+                {% if log.type == 'SENT' %}
+                    {% for request in requests %}
+                        {% if request.log.ID == log.ID %}
+                            <p>
+                                {{ log.hostname }} <br/> restLogger: {{ log.restLogger }} 
+                                <br/> <br/> {{ log.type }}: {{ request.requestType }} <br/> <br/> 
+                                request: <br/> {{ request.URL }} <br/> {{ request.params }}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
 
-{% endfor %}
+                {% if log.type == 'RECIEVED' %}
+                    {% for data in datas %}
+                        {% if data.log.ID == log.ID %}
+                            <p>
+                                {{ log.hostname }} <br/> restLogger: {{ log.restLogger }} 
+                                <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> 
+                                hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock content %}
