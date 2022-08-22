@@ -11,11 +11,11 @@ class Log(models.Model):
 
     class type_T(models.TextChoices):
         SENT = 'SENT', _('SENT')
-        RECIEVED = 'RECIEVED', _('RECIEVED')
+        RECIEVED = 'RECEIVED', _('RECEIVED')
 
     ID = models.IntegerField(primary_key=True)
     dateTime = models.DateTimeField()
-    type = models.CharField(max_length=8, choices=type_T.choices) #SENT/RECIEVED
+    type = models.CharField(max_length=8, choices=type_T.choices) #SENT/RECEIVED
     restLogger = models.CharField(max_length=64)
     hostname = models.CharField(max_length=64)
 
