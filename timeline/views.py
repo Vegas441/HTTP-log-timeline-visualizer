@@ -2,7 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf.urls.static import static
 from .models import *
+<<<<<<< HEAD
 from . import utils 
+=======
+from . import utils
+>>>>>>> d48a83aee1a51e9692027ead631e266c1a786702
 
 
 example_ctx = {
