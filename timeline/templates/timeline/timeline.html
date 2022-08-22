@@ -75,7 +75,7 @@ a:hover {
         <a href="{% url 'timeline-log' log.ID %}">
             <div class="card">
                 <div class="info">
-                <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s' }}</h3>
+                <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                 {% if log.type == 'SENT' %}
                     {% for request in requests %}
                         {% if request.log.ID == log.ID %}
