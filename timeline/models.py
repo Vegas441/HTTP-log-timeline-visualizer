@@ -11,7 +11,7 @@ class Log(models.Model):
 
     class type_T(models.TextChoices):
         SENT = 'SENT', _('SENT')
-        RECIEVED = 'RECEIVED', _('RECEIVED')
+        RECEIVED = 'RECEIVED', _('RECEIVED')
 
     ID = models.IntegerField(primary_key=True)
     dateTime = models.DateTimeField()

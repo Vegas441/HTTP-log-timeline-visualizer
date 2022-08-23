@@ -1,68 +1,6 @@
 {% extends "timeline/base.html" %}
 {% block content %}
 
-
-<!-- This is here because static doesnt work on certain classes for some reason 
-    and i would rather kill myself than spend 1 more second resolving it -->
-<style>
-/*
- * Classes for timeline on timeline page
- *
- */
-
-a:hover {
-    text-decoration: none;
-}
-
- /* Timeline Container */
-.timeline {
-    background: #fff;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-/* Outer Layer with the timeline border */
-.outer {
-    border-left: 2px solid #333
-}
-
-/* Card container */
-.card {
-    position: relative;
-    margin: 0 0 20px 20px;
-    padding: 10px;
-    background: #333;
-    color: white;
-    border-radius: 8px;
-    max-width: 400px;
-}
-
-/* Information about the timeline */
-.info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Title of the card */
-.title {
-    color: #3b82f6;
-    position: relative;
-}
-
-/* Timeline dot  */
-.title::before {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: white;
-    border-radius: 999px;
-    left: -39px;
-    border: 3px solid #3b82f6;
-}
-</style>
-
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1>{{ timeline.IP }}</h1>
@@ -75,10 +13,11 @@ a:hover {
         <a href="{% url 'timeline-log' log.ID %}">
             <div class="card">
                 <div class="info">
-                <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
+                
                 {% if log.type == 'SENT' %}
                     {% for request in requests %}
                         {% if request.log.ID == log.ID %}
+                            <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                             <p>
                                 {{ log.hostname }} <br/> restLogger: {{ log.restLogger }} 
                                 <br/> <br/> {{ log.type }}: {{ request.requestType }} <br/> <br/> 
@@ -88,9 +27,22 @@ a:hover {
                     {% endfor %}
                 {% endif %}
 
-                {% if log.type == 'RECIEVED' %}
+                {% if log.type == 'RECEIVED' %}
                     {% for data in datas %}
                         {% if data.log.ID == log.ID %}
+                            
+                            {% if data.statusCode == 404 %}
+                            <h3 class="title" style="color:orange">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
+                            {% endif %}
+
+                            {% if data.statusCode == 500 %}
+                            <h3 class="title" style="color:red;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
+                            {% endif %}
+
+                            {% if data.statusCode == 200 %}
+                            <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
+                            {% endif %}
+
                             <p>
                                 {{ log.hostname }} <br/> restLogger: {{ log.restLogger }} 
                                 <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> 
