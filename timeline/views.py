@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from .models import *
 from . import utils
 
-
+'''
 example_ctx = {
     'time': '2022-07-04 07:14:29.523+01:00',
     'type': 'RECIEVED',
@@ -16,6 +16,7 @@ example_ctx = {
     'role': 'SLAVE',
     'slave_hostname': 'slave_1'
 }
+'''
 
 # Create your views here.
 def home(request):
@@ -25,8 +26,7 @@ def home(request):
         'datas': Data.objects.all(),
         'requests': Request.objects.all()
     }
-    return render(request, 'timeline/home.html', context#, utils.log_process()
-    )
+    return render(request, 'timeline/home.html', context, utils.log_process())
 
 def log(request, id):   
     # Will be pulled from database
@@ -38,8 +38,7 @@ def log(request, id):
         'request': request_,
         'data': data_
     }
-    return render(request, 'timeline/log.html', context#, utils.log_process()
-    )
+    return render(request, 'timeline/log.html', context, utils.log_process())
 
 def timeline(request, ip):
     timeline_ = Timeline.objects.filter(IP=ip).first()
@@ -53,8 +52,7 @@ def timeline(request, ip):
         'requests': requests_,
         'datas': datas_
     }
-    return render(request, 'timeline/timeline.html', context#, utils.log_process()
-    )
+    return render(request, 'timeline/timeline.html', context, utils.log_process())
 
 def not_found_handler(request, exception):
     return render(request, 'timeline/404.html')
