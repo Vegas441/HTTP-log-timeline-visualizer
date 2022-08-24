@@ -1,0 +1,11 @@
+{% extends "timeline/base.html" %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 25vh; margin-left: 35vw;">
+        <h1 style="margin-left: 4%;">Connection error</h1>
+        <h2 >Cannot reach Jenkins server</h2>
+        <a href="{% url 'timeline-home' %}"><button class="btn btn-outline-primary" style="margin-left: 12%; margin-top: 10px;">Try again ?</button></a>
+    </div>
+
+{% endblock content %}

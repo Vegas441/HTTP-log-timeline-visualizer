@@ -26,7 +26,10 @@ def home(request):
         'datas': Data.objects.all(),
         'requests': Request.objects.all()
     }
-    return render(request, 'timeline/home.html', context, utils.log_process())
+    try:
+        return render(request, 'timeline/home.html', context, utils.log_process())
+    except:
+        return render(request, 'timeline/connection_error.html')
 
 def log(request, id):   
     # Will be pulled from database
@@ -38,7 +41,10 @@ def log(request, id):
         'request': request_,
         'data': data_
     }
-    return render(request, 'timeline/log.html', context, utils.log_process())
+    try:
+        return render(request, 'timeline/log.html', context, utils.log_process())
+    except:
+        return render(request, 'timeline/connection_error.html')
 
 def timeline(request, ip):
     timeline_ = Timeline.objects.filter(IP=ip).first()
@@ -52,7 +58,10 @@ def timeline(request, ip):
         'requests': requests_,
         'datas': datas_
     }
-    return render(request, 'timeline/timeline.html', context, utils.log_process())
+    try:
+        return render(request, 'timeline/timeline.html', context, utils.log_process())
+    except:
+        return render(request, 'timeline/connection_error.html')
 
 def not_found_handler(request, exception):
     return render(request, 'timeline/404.html')
