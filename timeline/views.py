@@ -22,7 +22,7 @@ example_ctx = {
 def home(request):
     context = {
         'timelines': Timeline.objects.all(),
-        'logs': Log.objects.all(),
+        'logs': Log.objects.order_by('-dateTime').all(),
         'datas': Data.objects.all(),
         'requests': Request.objects.all()
     }

@@ -17,6 +17,12 @@
     and i would rather kill myself than spend 1 more second resolving it -->
     <style>
         
+        div.scrollmenu {
+            overflow-x: scroll;
+            
+        }
+
+
         /*
         * 
         * Classes for timeline on home page 
@@ -26,8 +32,10 @@
         
         .timeline-steps {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            overflow: auto;
+            margin-bottom: 5%;
         }
         
         .timeline-steps .timeline-step {
@@ -116,20 +124,24 @@
             background: #333;
             color: white;
             border-radius: 8px;
-            max-width: 400px;
+            max-width: 350px;
+            max-height: 220px;
         }
 
         /* Information about the timeline */
         .info {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            font-size: 12px;
         }
 
         /* Title of the card */
         .title {
             color: #3b82f6;
             position: relative;
+            font-size: 20px;
+            margin-bottom: 0px;
         }
 
         /* Timeline dot  */

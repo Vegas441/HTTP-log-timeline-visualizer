@@ -3,7 +3,8 @@
 {% block content %}
 
 <div class="p-3 bg-dark text-white">
-    <h2> {{ log.dateTime|date:'Y-m-d H:i:s.u' }} </h2>
+    <h2 style="margin-top: 1%;"> {{ log.dateTime|date:'Y-m-d H:i:s.u' }} </h2>
+    <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -5%;">Home</button></a>
 </div>
 
 

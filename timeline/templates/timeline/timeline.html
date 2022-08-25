@@ -5,6 +5,7 @@
     <div class="container">
         <h1>{{ timeline.IP }}</h1>
     </div>
+    <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -10%;">Home</button></a>
 </div>
 
 <div class="timeline">
@@ -31,11 +32,11 @@
                     {% for data in datas %}
                         {% if data.log.ID == log.ID %}
                             
-                            {% if data.statusCode == 404 %}
+                            {% if data.statusCode > 400 and data.statusCode < 500 %}
                             <h3 class="title" style="color:orange">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                             {% endif %}
 
-                            {% if data.statusCode == 500 %}
+                            {% if data.statusCode > 500 %}
                             <h3 class="title" style="color:red;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                             {% endif %}
 

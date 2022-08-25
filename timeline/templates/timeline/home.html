@@ -31,8 +31,6 @@
             </a>
         </div>
 
-        
-        
         <div class="row">
             <div class="col">
                 <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
@@ -48,10 +46,10 @@
                                         {% if data.log.ID == log.ID %}
                                             <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
                                             <a href="javascript://" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}">
-                                                {% if data.statusCode == 404 %}
+                                                {% if data.statusCode > 400 and data.statusCode < 500 %}
                                                 <p class="h6 mt-1 mb-1" style="color: orange;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
                                                 {% endif %}
-                                                {% if data.statusCode == 500 %}
+                                                {% if data.statusCode > 500 %}
                                                 <p class="h6 mt-1 mb-1" style="color: red;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
                                                 {% endif %}
                                                 {% if data.statusCode == 200 %}
