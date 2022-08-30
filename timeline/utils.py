@@ -32,7 +32,7 @@ def log_prep(line, k, temp_ip, temp_id, log_id):
     log_ID = str(log_id)
     ID = temp_id
     if not k % 2:
-        ip = re.sub("http://", "", line[-1], 1)
+        ip = re.sub("http://", "", line[10], 1)
         ip = re.sub("[A-Za-z/]", "", ip)
 
         tm.IP = ip
@@ -56,7 +56,8 @@ def log_prep(line, k, temp_ip, temp_id, log_id):
         # request object
         requestType = 'POST'
         params = line[8]
-        URL = line[10]
+        URL = line[10:]
+        URL = " ".join(URL)
 
         rq.ID = ID
         rq.requestType = requestType
