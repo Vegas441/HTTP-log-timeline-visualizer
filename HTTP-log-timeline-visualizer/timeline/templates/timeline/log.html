@@ -1,0 +1,61 @@
+{% extends "timeline/base.html" %}
+
+{% block content %}
+
+<div class="p-3 bg-dark text-white">
+    <h2 style="margin-top: 1%;"> {{ log.dateTime|date:'Y-m-d H:i:s.u' }} </h2>
+    <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -5%;">Home</button></a>
+</div>
+
+
+
+<div class="container" style="margin-top: 10%;">
+    <table class="table table-bordered">
+        <tbody>
+            
+            {% if log.type == 'RECEIVED' %}
+                
+                <tr>
+                    <td>{{ log.hostname }} RestLogger: {{ log.restLogger }}</td>
+                </tr>
+
+                <tr>
+                    <td>{{ log.type }}: {{ data.statusCode }}</td>
+                </tr>
+
+                <tr>
+                    <td>hostname: {{ data.hostname }}  ip: {{ data.ip }}</td>
+                </tr>
+
+                <tr>
+                    <td>result: {{ data.result }}    role: {{ data.role }}</td>
+                </tr>                
+
+            {% endif %}
+
+            {% if log.type == 'SENT' %}
+                
+                <tr>
+                    <td>{{ log.hostname }} RestLogger: {{ log.restLogger }}</td>
+                </tr>
+
+                <tr>
+                    <td>{{ log.type }}: {{ request.requestType }}</td>
+                </tr>
+
+                <tr>
+                    <td>request: {{ request.URL }}</td>
+                </tr>
+
+                <tr>
+                    <td>params: {{ request.params }}</td>
+                </tr>
+                   
+            {% endif %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}
