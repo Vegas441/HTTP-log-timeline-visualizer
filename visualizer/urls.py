@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from timeline import views
 from django.conf.urls.static import static
+from django.conf import settings
 
 
 import timeline
@@ -27,3 +28,6 @@ urlpatterns = [
 ]
 
 handler404 = 'timeline.views.not_found_handler'
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

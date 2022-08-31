@@ -4,6 +4,7 @@ import paramiko
 import re
 from collections import defaultdict
 from timeline.models import *
+import os
 
 class datafetch:
     def __init__(self, username: str, password: str, url: str) -> None:
@@ -32,7 +33,7 @@ def log_prep(line, k, temp_ip, temp_id, log_id):
     log_ID = str(log_id)
     ID = temp_id
     if not k % 2:
-        ip = re.sub("http://", "", line[-1], 1)
+        ip = re.sub("http://", "", line[10], 1)
         ip = re.sub("[A-Za-z/]", "", ip)
 
         tm.IP = ip
@@ -56,7 +57,8 @@ def log_prep(line, k, temp_ip, temp_id, log_id):
         # request object
         requestType = 'POST'
         params = line[8]
-        URL = line[10]
+        URL = line[10:]
+        URL = " ".join(URL)
 
         rq.ID = ID
         rq.requestType = requestType
@@ -141,3 +143,23 @@ def log_process():
         if k % 2 != 0:
             temp_id += 1
         log_id += 1
+
+def file_process(name):
+    file = open(name, 'r')
+    lines = file.readlines()
+    print(lines)
+
+    temp_ip = 0
+    temp_id = 1
+    log_id = 1
+    for k, line, in enumerate(lines):
+        temp_ip = log_prep(line, k, temp_ip, temp_id, log_id)
+        if k % 2 != 0:
+            temp_id += 1
+        log_id += 1
+
+
+def read_file(name):
+    file = './media/' + name
+    f = open(file, 'r')
+    print(f.read())

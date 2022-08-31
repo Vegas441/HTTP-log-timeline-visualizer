@@ -3,6 +3,7 @@
 
 {% block content %}
 
+
 <div class="jumbotron">
     <a href="https://www.tietoevry.com/"><img id="tietoevry-logo" src="{% static 'timeline/tietoevry.png' %}" alt="Tietoevry"></a>
     <div class="container">
@@ -16,61 +17,80 @@
         <button type="button" class="btn btn-danger">Delete timelines</button>
         
     </div>
+    <div class="mb-4">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="document">
+            <button type="submit">Upload File </button>
+        </form>
+    </div>
 </div>
 
 
 <div class="container">
     <!-- For loop -->
-        <div class="card bg-dark text-white">
-            <div class="card-body">
-                {{ ip }}
-            </div>
+    {% for timeline in timelines %}
+        <div class="card border-dark mb-3" style="max-width: 180px; max-height: 50px;">
+            <a style="color: white" href="{% url 'timeline-tm' timeline.IP %}">
+                <div class="card-title" style="margin-left: 18%;">
+                    {{ timeline.IP }}
+                </div>
+            </a>
         </div>
 
-        <!-- Timeline example {delete later} -->
         <div class="row">
             <div class="col">
                 <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
 
-                    <!-- For loop -->
+                    {% for log in logs %}
 
-                    <div class="timeline-step">
+                    {% if log.timeline.IP  ==  timeline.IP %}
+                        <div class="timeline-step">
                             <div class="timeline-content">
-                                <a href="{% url 'timeline-log' %}"><div class="inner-circle"></div></a>    <!-- Popup example --> 
-                                <a href="#" data-toggle="popover" data-html="true" title="{{ time }}" data-content="{{ hostname }} <br/> restLogger: {{ restLogger }} <br/> <br/> {{ type }}: {{ status_code }} <br/> <br/> hostname: {{ slave_hostname }} <br/> ip: {{ ip }} <br/> result: {{ result }} <br/> role: {{ role }}">
-                                    <p class="h6 mt-3 mb-1">{{ time }}</p>
-                                </a>
+
+                                {% if log.type == 'RECEIVED' %}
+                                    {% for data in datas %}
+                                        {% if data.log.ID == log.ID %}
+                                            <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
+                                            <a href="javascript://" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}">
+                                                {% if data.statusCode > 400 and data.statusCode < 500 %}
+                                                <p class="h6 mt-1 mb-1" style="color: orange;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
+                                                {% endif %}
+                                                {% if data.statusCode > 500 %}
+                                                <p class="h6 mt-1 mb-1" style="color: red;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
+                                                {% endif %}
+                                                {% if data.statusCode == 200 %}
+                                                <p class="h6 mt-1 mb-1">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
+                                                {% endif %}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                
+                                {% if log.type == 'SENT' %}
+                                    {% for request in requests %}
+                                        {% if request.log.ID == log.ID %}
+                                            <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
+                                            <a href="javascript://" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ request.requestType }} <br/> <br/> request: <br/> {{ request.URL }} <br/> {{ request.params }}">
+                                                <p class="h6 mt-1 mb-1">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
+                                                
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
                             </div>
-                    </div>
-
-                    <div class="timeline-step">
-                        <div class="timeline-content">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.531+01:00</p>
                         </div>
-                    </div>
+                    {% endif %}
 
-                    <div class="timeline-step">
-                        <div class="timeline-content">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.534+01:00</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-step step mb-0">
-                        <div class="timeline-content">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2022-07-04 07:14:29.538+01:00</p>
-                        </div>
-                    </div>
-
-                    <!-- End loop -->
+                    {% endfor %}
 
                 </div>
             </div>
         </div>
-
+    
     <!-- End loop -->
+    {% endfor %}
 </div>
 
 {% endblock content %}
