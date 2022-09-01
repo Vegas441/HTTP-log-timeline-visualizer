@@ -33,12 +33,35 @@ def home(request):
             uploaded_file = request.FILES['document']
             fs = FileSystemStorage()
             fs.save(uploaded_file.name, uploaded_file)
-            utils.read_file(uploaded_file.name)
-            #return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
-        #else:
-        return render(request, 'timeline/home.html', context, utils.log_process())
+            utils.file_process('./media/' + uploaded_file.name)
+            context = {
+                'timelines': Timeline.objects.all(),
+                'logs': Log.objects.order_by('-dateTime').all(),
+                'datas': Data.objects.all(),
+                'requests': Request.objects.all()
+            }
+            return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
+        else:
+            return render(request, 'timeline/home.html', context, utils.log_process())
     except:
         return render(request, 'timeline/connection_error.html')
+
+def home_file(request):
+    context = {
+        'timelines': Timeline.objects.all(),
+        'logs': Log.objects.order_by('-dateTime').all(),
+        'datas': Data.objects.all(),
+        'requests': Request.objects.all()
+    }
+    if request.method == 'POST':
+        try:
+            uploaded_file = request.FILES['document']
+            fs = FileSystemStorage()
+            fs.save(uploaded_file.name, uploaded_file)
+            utils.read_file(uploaded_file.name)
+            return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
+        except:
+            return render(request, 'timeline/connection_error.html')
 
 def log(request, id):   
     # Will be pulled from database
