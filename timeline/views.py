@@ -32,6 +32,8 @@ def home(request):
         if request.method == 'POST':
             uploaded_file = request.FILES['document']
             fs = FileSystemStorage()
+            if fs.exists(uploaded_file.name):
+                fs.delete(uploaded_file.name)
             fs.save(uploaded_file.name, uploaded_file)
             utils.file_process('./media/' + uploaded_file.name)
             context = {

@@ -115,7 +115,7 @@ def log_process():
     username = "student"
     password = "student!"
 
-    BuildNum = 21
+    BuildNum = 20
 
     fetch = datafetch(username, password, 'http://10.14.222.120:50088//')
     jenkins_client = fetch.setup_connection()
@@ -147,19 +147,14 @@ def log_process():
 def file_process(name):
     file = open(name, 'r')
     lines = file.readlines()
-    print(lines)
 
     temp_ip = 0
     temp_id = 1
     log_id = 1
+    data = Timeline.objects.all()
+    data.delete()
     for k, line, in enumerate(lines):
         temp_ip = log_prep(line, k, temp_ip, temp_id, log_id)
         if k % 2 != 0:
             temp_id += 1
         log_id += 1
-
-
-def read_file(name):
-    file = './media/' + name
-    f = open(file, 'r')
-    print(f.read())
