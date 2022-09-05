@@ -10,18 +10,14 @@
         <h1>Tietoevry - HTTP Log Timeline Visualizer</h1>
         <h3 style="color: #c3c3c3;"> <a class="jenkins-link" href="http://10.14.222.120:50088/">Jenkins</a> log generator</h3>
         <hr>
-
-        
-        <button type="button" class="btn btn-primary">Generate timelines</button>
-
-        <button type="button" class="btn btn-danger">Delete timelines</button>
         
     </div>
+
     <div class="mb-4">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="file" name="document">
-            <button type="submit">Upload File </button>
+            <button type="submit" class="btn btn-primary" style="margin-left: -10%;">Generate timelines</button>
         </form>
     </div>
 </div>

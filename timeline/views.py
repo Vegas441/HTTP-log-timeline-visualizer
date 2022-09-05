@@ -5,6 +5,7 @@ from .models import *
 from . import utils
 from . import forms
 from django.core.files.storage import FileSystemStorage
+from .forms import DateTimeForm
 
 '''
 example_ctx = {
@@ -92,6 +93,11 @@ def timeline(request, ip):
         'requests': requests_,
         'datas': datas_
     }
+
+    if request.method == 'POST':
+        print('post')
+        #TODO: pull context again
+
     try:
         return render(request, 'timeline/timeline.html', context, utils.log_process())
     except:

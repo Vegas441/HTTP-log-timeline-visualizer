@@ -8,6 +8,14 @@
     <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -10%;">Home</button></a>
 </div>
 
+<div class="datetime-form">
+    <form method="POST">
+        {% csrf_token %}
+        <input type="datetime-local" name="dateTime">
+        <button type="submit">Filter</button>
+    </form>
+</div>
+
 <div class="timeline">
     <div class="outer">
         {% for log in logs %}
