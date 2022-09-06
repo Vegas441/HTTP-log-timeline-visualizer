@@ -115,17 +115,20 @@ def log_process():
     username = "student"
     password = "student!"
 
-    BuildNum = 20
+    BuildNum = 0
 
     fetch = datafetch(username, password, 'http://10.14.222.120:50088//')
     jenkins_client = fetch.setup_connection()
 
     next_bn = jenkins_client.get_job_info('math_test')['nextBuildNumber']
-    result = jenkins_client.get_build_info('math_test', BuildNum)['result']
-
-    if "SUCCESS" not in result:
-        print('this build failed, exiting')
-        exit(1)
+    
+    for i in range(1,next_bn):
+        try:
+            res = jenkins_client.get_build_info('math_test', i)['result']
+        except:
+            continue
+        if "SUCCESS" in res:
+            BuildNum = i
 
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
