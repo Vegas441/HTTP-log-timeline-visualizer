@@ -86,21 +86,25 @@ def timeline(request, ip):
     logs_ = Log.objects.filter(timeline=timeline_)
     requests_ = Request.objects.all()
     datas_ = Data.objects.all()
-
+    
+    if request.method == 'GET' and 'dateTime' in request.GET:
+        print('get')
+        dateTimeLimit = request.GET['dateTime']
+        print(dateTimeLimit)
+        logs_ = Log.objects.filter(timeline=timeline_, dateTime = dateTimeLimit)
+        #TODO oprav
+    
     context = {
         'timeline': timeline_,
         'logs': logs_,
         'requests': requests_,
-        'datas': datas_
-    }
-
-    if request.method == 'POST':
-        print('post')
-        #TODO: pull context again
-
+        'datas': datas_,
+        'form': DateTimeForm()
+    }  
     try:
         return render(request, 'timeline/timeline.html', context, utils.log_process())
-    except:
+    except Exception as e:
+        print(e)
         return render(request, 'timeline/connection_error.html')
 
 def not_found_handler(request, exception):

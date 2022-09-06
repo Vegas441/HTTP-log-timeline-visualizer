@@ -2,4 +2,4 @@ from datetime import datetime
 from django import forms
 
 class DateTimePickerInput(forms.DateTimeInput):
-    input_type: datetime
+    input_type = 'datetime'
