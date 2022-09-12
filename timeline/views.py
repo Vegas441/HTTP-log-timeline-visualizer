@@ -47,7 +47,8 @@ def home(request):
             return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
         else:
             return render(request, 'timeline/home.html', context, utils.log_process())
-    except:
+    except Exception as e:
+        print(e)
         return render(request, 'timeline/connection_error.html')
 
 def home_file(request):
@@ -93,11 +94,8 @@ def timeline(request, ip):
         form = DateTimeForm(request.GET)
         if form.is_valid():
             dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
-            #dateTimeLimit = dateTimeLimit.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-            #dateTimeLimit = datetime(2022, 7, 1, 12, 30, 00, 000000, tzinfo=timezone.utc)
             print(dateTimeLimit)    
-            logs_ = Log.objects.filter(timeline=timeline_, dateTime = dateTimeLimit)
-        #TODO oprav
+            logs_ = Log.objects.filter(timeline=timeline_, dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"])
         else: 
             form = DateTimeForm()
 
