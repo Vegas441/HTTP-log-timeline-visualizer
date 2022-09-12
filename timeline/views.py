@@ -6,6 +6,7 @@ from . import utils
 from . import forms
 from django.core.files.storage import FileSystemStorage
 from .forms import DateTimeForm
+from datetime import datetime, tzinfo, timezone
 
 '''
 example_ctx = {
@@ -87,20 +88,27 @@ def timeline(request, ip):
     requests_ = Request.objects.all()
     datas_ = Data.objects.all()
     
-    if request.method == 'GET' and 'dateTime' in request.GET:
+    if request.method == 'GET':
         print('get')
-        dateTimeLimit = request.GET['dateTime']
-        print(dateTimeLimit)
-        logs_ = Log.objects.filter(timeline=timeline_, dateTime = dateTimeLimit)
+        form = DateTimeForm(request.GET)
+        if form.is_valid():
+            dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
+            #dateTimeLimit = dateTimeLimit.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+            #dateTimeLimit = datetime(2022, 7, 1, 12, 30, 00, 000000, tzinfo=timezone.utc)
+            print(dateTimeLimit)    
+            logs_ = Log.objects.filter(timeline=timeline_, dateTime = dateTimeLimit)
         #TODO oprav
-    
+        else: 
+            form = DateTimeForm()
+
     context = {
         'timeline': timeline_,
         'logs': logs_,
         'requests': requests_,
         'datas': datas_,
-        'form': DateTimeForm()
+        'form': form
     }  
+
     try:
         return render(request, 'timeline/timeline.html', context, utils.log_process())
     except Exception as e:

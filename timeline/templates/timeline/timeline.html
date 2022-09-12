@@ -10,10 +10,12 @@
 
 <div class="datetime-form">
     <form method="GET">
-        {{ form }}
+        {% csrf_token %}
+        {{ form.date }} <br>
+        {{ form.time }}
         <!-- TOTO NEBUDE FUNGOVAT LEBO TO JE LEN CEZ DEFAULT HTML | OPRAV! -->
         <!--<input type="datetime-local" name="dateTime">-->
-        <button type="submit">Filter</button>
+        <input type="submit"></input>
     </form>
 </div>
 
