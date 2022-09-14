@@ -8,13 +8,12 @@
     <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -8%;">Home</button></a>
 </div>
 
+<!-- Date time filter -->
 <div class="datetime-form">
     <form method="GET">
         {% csrf_token %}
         {{ form.date }} <br>
         {{ form.time }}
-        <!-- TOTO NEBUDE FUNGOVAT LEBO TO JE LEN CEZ DEFAULT HTML | OPRAV! -->
-        <!--<input type="datetime-local" name="dateTime">-->
         <input type="submit"></input>
     </form>
 </div>

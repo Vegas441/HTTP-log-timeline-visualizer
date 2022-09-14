@@ -13,11 +13,22 @@
         
     </div>
 
+    <!-- File upload field -->
     <div class="mb-4">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="file" name="document">
             <button type="submit" class="btn btn-primary" style="margin-left: -10%;">Generate timelines</button>
+        </form>
+    </div>
+
+    <!-- Date time filter -->
+    <div class="datetime-form">
+        <form method="GET">
+            {% csrf_token %}
+            {{ form.date }} <br>
+            {{ form.time }}
+            <input type="submit"></input>
         </form>
     </div>
 </div>

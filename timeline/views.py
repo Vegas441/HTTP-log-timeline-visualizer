@@ -7,8 +7,9 @@ from . import forms
 from django.core.files.storage import FileSystemStorage
 from .forms import DateTimeForm
 from datetime import datetime, tzinfo, timezone
-
+ 
 '''
+# This is an example context used in early phases of the project
 example_ctx = {
     'time': '2022-07-04 07:14:29.523+01:00',
     'type': 'RECIEVED',
@@ -22,15 +23,16 @@ example_ctx = {
 }
 '''
 
-# Create your views here.
 def home(request):
     context = {
         'timelines': Timeline.objects.all(),
         'logs': Log.objects.order_by('-dateTime').all(),
         'datas': Data.objects.all(),
-        'requests': Request.objects.all()
+        'requests': Request.objects.all(),
+        'form': DateTimeForm()
     }
     try:
+        # Load a fie
         if request.method == 'POST':
             uploaded_file = request.FILES['document']
             fs = FileSystemStorage()
@@ -45,6 +47,16 @@ def home(request):
                 'requests': Request.objects.all()
             }
             return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
+        
+        # Filter by date and time 
+        elif request.method == 'GET':
+            form = DateTimeForm(request.GET)
+            if form.is_valid():
+                context['form'] = form
+                dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
+                #print(dateTimeLimit)    
+                context['logs'] = Log.objects.filter(dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"]).order_by('-dateTime')
+            return render(request, 'timeline/home.html', context, utils.log_process())
         else:
             return render(request, 'timeline/home.html', context, utils.log_process())
     except Exception as e:
@@ -89,12 +101,13 @@ def timeline(request, ip):
     requests_ = Request.objects.all()
     datas_ = Data.objects.all()
     
+    # Filter by date and time 
     if request.method == 'GET':
-        print('get')
+        #print('get')
         form = DateTimeForm(request.GET)
         if form.is_valid():
             dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
-            print(dateTimeLimit)    
+            #print(dateTimeLimit)    
             logs_ = Log.objects.filter(timeline=timeline_, dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"])
         else: 
             form = DateTimeForm()
