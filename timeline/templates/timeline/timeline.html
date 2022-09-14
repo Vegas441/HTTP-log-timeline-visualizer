@@ -1,11 +1,21 @@
 {% extends "timeline/base.html" %}
 {% block content %}
 
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid" style="height: 35px;">
     <div class="container">
-        <h1>{{ timeline.IP }}</h1>
+        <h1 style="margin-top: -25px;">{{ timeline.IP }}</h1>
     </div>
-    <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -10%;">Home</button></a>
+    <a href="{% url 'timeline-home' %}"><button class="btn btn-primary" style="margin-left: 90%; margin-top: -8%;">Home</button></a>
+</div>
+
+<!-- Date time filter -->
+<div class="datetime-form">
+    <form method="GET">
+        {% csrf_token %}
+        {{ form.date }} <br>
+        {{ form.time }}
+        <input type="submit"></input>
+    </form>
 </div>
 
 <div class="timeline">
