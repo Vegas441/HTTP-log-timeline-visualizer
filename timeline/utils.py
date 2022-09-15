@@ -105,6 +105,61 @@ def log_prep(line, k, temp_ip, temp_id, log_id):
 
         data.save()
 
+def file_prep(line, temp_ip, temp_id, log_id):
+    if 'SENT:' in line:
+        #LOG
+        datetime = line[0] + ' ' + line[1][0:12]
+        hostname = line[3]
+        type = ''
+        restlogger = line[line.index('vRestLogger:') + 1]
+        if 'CONF' in line[line.index(restlogger) + 1]:
+            type = line[line.index(restlogger) + 1] + ' ' + line[line.index(restlogger) + 2]
+        else:
+            type = line[line.index(restlogger) + 1]
+
+        #REQUEST
+        requestType = line[line.index('-X') + 1]
+        params = '-X'
+        URL = line[(line.index('-X') + 2):]
+        URL = " ".join(URL)
+
+        #TIMELINE
+        ip = line[line.index(requestType) + 1]
+        ip = re.sub("http://", "", ip, 1)
+        ip = re.sub("[A-Za-z/]", "", ip)
+        #print(line)
+        print('LOG:')
+        print('datetime =', datetime, 'hostname =', hostname, 'type =', type, 'restlogger =', restlogger, 'ID =', log_id)
+        print('REQUEST:')
+        print('requestType =', requestType, 'params =', params, 'URL =', URL, 'ID =', temp_id)
+        return ip
+    else:
+        #LOG
+        datetime = line[0] + ' ' + line[1][0:12]
+        hostname = line[3]
+        type = ''
+        restlogger = line[line.index('vRestLogger:') + 1]
+        if 'CONF' in line[line.index(restlogger) + 1]:
+            type = line[line.index(restlogger) + 1] + ' ' + line[line.index(restlogger) + 2]
+        else:
+            type = line[line.index(restlogger) + 1]
+
+        #RESPONSE
+        return_code = line[line.index('RECEIVED:') + 1][0:3]
+        hostname = 'Slave_1'
+        result = line[line.index('RECEIVED:') + 1][4:]
+        ip = temp_ip
+        role = 'SLAVE'
+        res = line[line.index('RECEIVED:') + 1]
+        index = res.find('"result')
+        result = res[index:]
+
+        #print(line)
+        print('LOG:')
+        print('datetime =', datetime, 'hostname =', hostname, 'type =', type, 'restlogger =', restlogger, 'ID =', log_id)
+        print('RESPONSE')
+        print('return code =', return_code, 'hostname =', hostname, 'result =', result, 'ip =', ip, 'role =', role, 'ID =', temp_id)
+
 
 
 # sets up connection with jenkins server, uses log_prep() function to create and return a dictionary
@@ -115,17 +170,20 @@ def log_process():
     username = "student"
     password = "student!"
 
-    BuildNum = 20
+    BuildNum = 0
 
     fetch = datafetch(username, password, 'http://10.14.222.120:50088//')
     jenkins_client = fetch.setup_connection()
 
     next_bn = jenkins_client.get_job_info('math_test')['nextBuildNumber']
-    result = jenkins_client.get_build_info('math_test', BuildNum)['result']
-
-    if "SUCCESS" not in result:
-        print('this build failed, exiting')
-        exit(1)
+    
+    for i in range(1,next_bn):
+        try:
+            res = jenkins_client.get_build_info('math_test', i)['result']
+        except:
+            continue
+        if "SUCCESS" in res:
+            BuildNum = i
 
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -158,3 +216,25 @@ def file_process(name):
         if k % 2 != 0:
             temp_id += 1
         log_id += 1
+
+def file_process_better():
+    sent_len = []
+    rec_len = []
+    temp_ip = 0
+    temp_id = 1
+    log_id = 1
+    with open('vrest.log', encoding='utf-8') as file:
+    #file = open('vrest.log', 'r').readlines()[1::2]
+        for k, line in enumerate(file):
+            if k == 100:
+                break
+            line = line.strip()
+            line = str(line).split(' ')
+            line = [i for i in line if i]
+            if 'SENT:' in line or 'RECEIVED:' in line:
+                temp_ip = file_prep(line, temp_ip, temp_id, log_id, sent_len, rec_len)
+                log_id += 1
+                if log_id % 2 != 0:
+                    temp_id += 1
+
+
