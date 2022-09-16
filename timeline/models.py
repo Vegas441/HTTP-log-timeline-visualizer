@@ -37,10 +37,10 @@ class Request(models.Model):
 class Data(models.Model):
     ID = models.IntegerField(primary_key=True)
     statusCode = models.IntegerField()
-    hostname = models.CharField(max_length=64)
     ip = models.CharField(max_length=45)
-    result = models.CharField(max_length=256)
-    role = models.CharField(max_length=64)
+    data = models.CharField(max_length=4096)
+    #role = models.CharField(max_length=64)
+    #hostname = models.CharField(max_length=64)
 
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
 
