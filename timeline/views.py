@@ -56,9 +56,9 @@ def home(request):
                 dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
                 #print(dateTimeLimit)    
                 context['logs'] = Log.objects.filter(dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"]).order_by('-dateTime')
-            return render(request, 'timeline/home.html', context, utils.log_process())
+            return render(request, 'timeline/home.html', context) #, utils.log_process())
         else:
-            return render(request, 'timeline/home.html', context, utils.log_process())
+            return render(request, 'timeline/home.html', context) #, utils.log_process())
     except Exception as e:
         print(e)
         return render(request, 'timeline/connection_error.html')
