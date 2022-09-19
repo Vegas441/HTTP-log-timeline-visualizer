@@ -50,7 +50,7 @@
                             <h3 class="title" style="color:red;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                             {% endif %}
 
-                            {% if data.statusCode == 200 %}
+                            {% if data.statusCode > 199 and data.statusCode < 300 %}
                             <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                             {% endif %}
 
