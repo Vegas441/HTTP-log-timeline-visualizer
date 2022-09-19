@@ -12,10 +12,12 @@ class Log(models.Model):
     class type_T(models.TextChoices):
         SENT = 'SENT', _('SENT')
         RECEIVED = 'RECEIVED', _('RECEIVED')
+        CONF_SENT = 'CONF SENT', _('CONF SENT')
+        CONF_RECEIVED = 'CONF RECEIVED', _('CONF RECEIVED')
 
     ID = models.IntegerField(primary_key=True)
     dateTime = models.DateTimeField()
-    type = models.CharField(max_length=8, choices=type_T.choices) #SENT/RECEIVED
+    type = models.CharField(max_length=20, choices=type_T.choices) #SENT/RECEIVED
     restLogger = models.CharField(max_length=64)
     hostname = models.CharField(max_length=64)
 
@@ -37,10 +39,10 @@ class Request(models.Model):
 class Data(models.Model):
     ID = models.IntegerField(primary_key=True)
     statusCode = models.IntegerField()
-    hostname = models.CharField(max_length=64)
     ip = models.CharField(max_length=45)
-    result = models.CharField(max_length=256)
-    role = models.CharField(max_length=64)
+    data = models.CharField(max_length=4096)
+    #role = models.CharField(max_length=64)
+    #hostname = models.CharField(max_length=64)
 
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
 

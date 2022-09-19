@@ -21,97 +21,23 @@ class datafetch:
     def get_all_nodes(self, connection: jenkins) -> list:
         return connection.get_nodes()
 
-# creates a dictionary with ip address as keys, data as values
-# def log_prep(line, k, temp_ip, temp_id, log_id):
-#     line = line.strip()
-#     line = str(line).split(' ')
-#     log1 = Log()
-#     log2 = Log()
-#     tm = Timeline()
-#     rq = Request()
-#     data = Data()
-#     log_ID = str(log_id)
-#     ID = temp_id
-#     if not k % 2:
-#         ip = re.sub("http://", "", line[10], 1)
-#         ip = re.sub("[A-Za-z/]", "", ip)
-
-#         tm.IP = ip
-#         tm.save()
-
-#         # request log
-#         datetime = line[0] + ' ' + line[1]
-#         type = 'SENT'
-#         restLogger = line[6]
-#         hostname = line[3]
-
-#         log1.ID = log_ID
-#         log1.dateTime = datetime
-#         log1.type = type
-#         log1.restLogger = restLogger
-#         log1.hostname = hostname
-#         log1.timeline = tm
-
-#         log1.save()
-
-#         # request object
-#         requestType = 'POST'
-#         params = line[8]
-#         URL = line[10:]
-#         URL = " ".join(URL)
-
-#         rq.ID = ID
-#         rq.requestType = requestType
-#         rq.params = params
-#         rq.URL = URL
-#         rq.log = log1
-
-#         rq.save()
-
-#         return ip
-#     else:
-#         tm.IP = temp_ip
-#         tm.save()
-       
-#         return_code = re.sub("[^0-9]", "", line[8])
-#         result = line[13].replace(',', '')
-#         slave = re.sub('[",]', '', line[9])
-#         role = re.sub('["}]', '', line[15])
-
-#         #received log
-#         datetime = line[0] + ' ' + line[1]
-#         type = 'RECEIVED'
-#         restlogger = line[6]
-#         master = line[3]
-#         ip = re.sub('[",]', '', line[11])
-
-#         log2.ID = log_ID
-#         log2.dateTime = datetime
-#         log2.type = type
-#         log2.restLogger = restlogger
-#         log2.hostname = master
-#         log2.timeline = tm
-
-#         log2.save()
-
-#         # default data object
-#         data.ID = ID
-#         data.statusCode = return_code
-#         data.hostname = slave
-#         data.ip = ip
-#         data.result = result
-#         data.role = role
-#         data.log = log2
-
-#         data.save()
-
 def file_prep(line, temp_ip, temp_id, log_id):
     log = Log()
     tm = Timeline()
     rq = Request()
     data = Data()
     log_ID = str(log_id)
-    ID = temp_id
+    rq_id = temp_id
+    data_id = temp_id
+
+    try:
+        log_ID = (Log.objects.last().ID) + 1
+        print(Log.objects.last().type)
+        print(Log.objects.last().dateTime)
+        rq_id = (Request.objects.last().ID) + 1
+        data_id = (Data.objects.last().ID) + 1
+    except Exception:
+        pass
 
     #LOG
     datetime = line[0] + ' ' + line[1]
@@ -138,11 +64,10 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         #TIMELINE
         ip = line[line.index(requestType) + 1]
-        #ip = re.sub("[A-Za-z/\-]", "", ip)
         sub_ip = ip.split('/')
         ip = sub_ip[2]
 
-        tm.ip = ip
+        tm.IP = ip
         tm.save()
 
         log.ID = log_ID
@@ -154,7 +79,7 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         log.save()
 
-        rq.ID = ID
+        rq.ID = rq_id
         rq.requestType = requestType
         rq.params = params
         rq.URL = URL
@@ -162,12 +87,8 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         rq.save()
 
-        # print('LOG:')
-        # print('datetime =', datetime, 'hostname =', hostname, 'type =', type, 'restlogger =', restlogger, 'ID =', log_id)
-        # print('REQUEST:')
-        # print('requestType =', requestType, 'params =', params, 'URL =', URL, 'ID =', temp_id)
-        print(tm.ip)
-        print(rq.ID, rq.requestType, rq.params, rq.URL)
+        print(tm.IP)
+        print(rq.ID, rq.requestType, rq.params, rq.URL, rq.log.dateTime, rq.log.ID)
         print(log.ID, log.dateTime, log.type, log.restLogger, log.hostname)
         return ip
     else:
@@ -177,7 +98,7 @@ def file_prep(line, temp_ip, temp_id, log_id):
         result = result[4:]
         ip = temp_ip
 
-        tm.ip = temp_ip
+        tm.IP = temp_ip
         tm.save()
 
         log.ID = log_ID
@@ -189,7 +110,7 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         log.save()
 
-        data.ID = ID
+        data.ID = data_id
         data.statusCode = return_code
         data.ip = ip
         data.data = result
@@ -197,15 +118,11 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         data.save()
 
-        print(tm.ip)
-        print(data.ID, data.statusCode, data.ip, data.data)
+        print(tm.IP)
+        print(data.ID, data.statusCode, data.ip, data.data, data.log.dateTime, data.log.ID)
         print(log.ID, log.dateTime, log.type, log.restLogger, log.hostname)
 
-        # print(line)
-        # print('LOG:')
-        # print('datetime =', datetime, 'hostname =', hostname, 'type =', type, 'restlogger =', restlogger, 'ID =', log_id)
-        # print('RESPONSE')
-        # print('return code =', return_code, 'hostname =', hostname, 'result =', result, 'ip =', ip, 'role =', role, 'ID =', temp_id)
+        return ip
 
 
 
@@ -245,35 +162,21 @@ def log_process():
     temp_ip = 0
     temp_id = 1
     log_id = 1
+    data = Timeline.objects.all()
+    data.delete()
     for line in lines:
         line = line.strip()
         line = str(line).split(' ')
         line = [i for i in line if i]
         if 'SENT:' in line or 'RECEIVED:' in line:
             temp_ip = file_prep(line, temp_ip, temp_id, log_id)
-            log_id += 1
-            if log_id % 2 != 0:
-                temp_id += 1
-
-# def file_process(name):
-#     file = open(name, 'r')
-#     lines = file.readlines()
-
-#     temp_ip = 0
-#     temp_id = 1
-#     log_id = 1
-#     data = Timeline.objects.all()
-#     data.delete()
-#     for k, line, in enumerate(lines):
-#         temp_ip = log_prep(line, k, temp_ip, temp_id, log_id)
-#         if k % 2 != 0:
-#             temp_id += 1
-#         log_id += 1
 
 def file_process(name):
     temp_ip = 0
     temp_id = 1
     log_id = 1
+    data = Timeline.objects.all()
+    data.delete()
     with open(name, encoding='utf-8') as file:
         for line in file:
             line = line.strip()
@@ -281,6 +184,3 @@ def file_process(name):
             line = [i for i in line if i]
             if 'SENT:' in line or 'RECEIVED:' in line:
                 temp_ip = file_prep(line, temp_ip, temp_id, log_id)
-                log_id += 1
-                if log_id % 2 != 0:
-                    temp_id += 1
