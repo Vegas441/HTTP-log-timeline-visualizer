@@ -13,7 +13,7 @@
     <table class="table table-bordered">
         <tbody>
             
-            {% if log.type == 'RECEIVED' %}
+            {% if log.type == 'RECEIVED' or log.type == 'CONF RECEIVED' %}
                 
                 <tr>
                     <td>{{ log.hostname }} RestLogger: {{ log.restLogger }}</td>
@@ -33,7 +33,7 @@
 
             {% endif %}
 
-            {% if log.type == 'SENT' %}
+            {% if log.type == 'SENT' or log.type == 'CONF SENT' %}
                 
                 <tr>
                     <td>{{ log.hostname }} RestLogger: {{ log.restLogger }}</td>
