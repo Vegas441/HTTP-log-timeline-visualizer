@@ -39,12 +39,12 @@ def home(request):
             if fs.exists(uploaded_file.name):
                 fs.delete(uploaded_file.name)
             fs.save(uploaded_file.name, uploaded_file)
-            utils.file_process('./media/' + uploaded_file.name)
             context = {
                 'timelines': Timeline.objects.all(),
                 'logs': Log.objects.order_by('-dateTime').all(),
                 'datas': Data.objects.all(),
-                'requests': Request.objects.all()
+                'requests': Request.objects.all(),
+                'form': DateTimeForm()
             }
             return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
         
@@ -56,29 +56,12 @@ def home(request):
                 dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
                 #print(dateTimeLimit)    
                 context['logs'] = Log.objects.filter(dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"]).order_by('-dateTime')
-            return render(request, 'timeline/home.html', context, utils.log_process())
+            return render(request, 'timeline/home.html', context) #, utils.log_process())
         else:
-            return render(request, 'timeline/home.html', context, utils.log_process())
+            return render(request, 'timeline/home.html', context) #, utils.log_process())
     except Exception as e:
         print(e)
         return render(request, 'timeline/connection_error.html')
-
-def home_file(request):
-    context = {
-        'timelines': Timeline.objects.all(),
-        'logs': Log.objects.order_by('-dateTime').all(),
-        'datas': Data.objects.all(),
-        'requests': Request.objects.all()
-    }
-    if request.method == 'POST':
-        try:
-            uploaded_file = request.FILES['document']
-            fs = FileSystemStorage()
-            fs.save(uploaded_file.name, uploaded_file)
-            utils.read_file(uploaded_file.name)
-            return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
-        except:
-            return render(request, 'timeline/connection_error.html')
 
 def log(request, id):   
     # Will be pulled from database
