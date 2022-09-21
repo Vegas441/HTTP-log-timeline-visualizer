@@ -30,9 +30,9 @@
                         {% if request.log.ID == log.ID %}
                             <h3 class="title">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</h3>
                             <p>
-                                {{ log.hostname }} <br/> restLogger: {{ log.restLogger }} 
-                                <br/> <br/> {{ log.type }}: {{ request.requestType }} <br/> <br/> 
-                                request: <br/> {{ request.URL }} <br/> {{ request.params }}
+                                {{ log.hostname }} <br/> <b>restLogger:</b> {{ log.restLogger }} 
+                                <br/> <br/> {{ log.type }}: {{ request.params }} {{ request.requestType }} <br/> <br/> 
+                                <b>request:</b> <br/> {{ request.URL }}
                             </p>
                         {% endif %}
                     {% endfor %}
@@ -55,9 +55,9 @@
                             {% endif %}
 
                             <p>
-                                {{ log.hostname }} <br/> restLogger: {{ log.restLogger }} 
+                                {{ log.hostname }} <br/> <b>restLogger:</b> {{ log.restLogger }} 
                                 <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> 
-                                hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}
+                                <b>ip:</b> {{ data.ip }} <br/> <b>result:</b> <br/> {{ data.data }}
                             </p>
                         {% endif %}
                     {% endfor %}

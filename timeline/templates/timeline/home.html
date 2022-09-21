@@ -4,7 +4,7 @@
 {% block content %}
 
 
-<div class="jumbotron">
+<div class="jumbotron" style="padding: 6em; margin-bottom: 80px;">
     <a href="https://www.tietoevry.com/"><img id="tietoevry-logo" src="{% static 'timeline/tietoevry.png' %}" alt="Tietoevry"></a>
     <div class="container">
         <h1>Tietoevry - HTTP Log Timeline Visualizer</h1>
@@ -15,10 +15,17 @@
 
     <!-- File upload field -->
     <div class="mb-4">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" action="{% url 'timeline-home' %}">
             {% csrf_token %}
             <input type="file" name="document" style="margin-left: -23.5%;">
-            <button type="submit" class="btn btn-primary" style="margin-left: -10%;">Generate timelines</button>
+            <button type="submit" class="btn btn-primary" style="margin-left: -10%;">Generate from file</button>
+        </form>
+
+        <!-- URL field -->
+        <form method="post" action="{% url 'timeline-home' %}" style="margin-top: 5px; margin-left: -23.5%; margin-bottom: 30px;">
+            {% csrf_token %}
+            <input type="text" name="jenkins_url">
+            <button type="submit" class="btn btn-primary" style="margin-left: 10%;">Generate from URL</button>
         </form>
     </div>
 
@@ -26,11 +33,12 @@
     <div class="datetime-form">
         <form method="GET">
             {% csrf_token %}
-            {{ form.date }} <br>
-            {{ form.time }}
+            {{ filter_form.date }} <br>
+            {{ filter_form.time }}
             <input type="submit"></input>
         </form>
     </div>
+
 </div>
 
 
@@ -101,3 +109,15 @@
 </div>
 
 {% endblock content %}
+
+{% block foot %}
+
+<!-- Delete timelines button -->
+<div>
+    <form method="post" action="{% url 'delete' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" style="float: right; margin-right: 10%; margin-bottom: 5%;">Delete timelines</button>
+    </form>
+</div>
+
+{% endblock foot %}
