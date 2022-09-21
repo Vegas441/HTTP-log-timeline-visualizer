@@ -4,7 +4,7 @@
 {% block content %}
 
 
-<div class="jumbotron">
+<div class="jumbotron" style="padding: 6em; margin-bottom: 80px;">
     <a href="https://www.tietoevry.com/"><img id="tietoevry-logo" src="{% static 'timeline/tietoevry.png' %}" alt="Tietoevry"></a>
     <div class="container">
         <h1>Tietoevry - HTTP Log Timeline Visualizer</h1>
@@ -15,10 +15,17 @@
 
     <!-- File upload field -->
     <div class="mb-4">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" action="{% url 'timeline-home' %}">
             {% csrf_token %}
-            <input type="file" name="document">
-            <button type="submit" class="btn btn-primary" style="margin-left: -10%;">Generate timelines</button>
+            <input type="file" name="document" style="margin-left: -23.5%;">
+            <button type="submit" class="btn btn-primary" style="margin-left: -10%;">Generate from file</button>
+        </form>
+
+        <!-- URL field -->
+        <form method="post" action="{% url 'timeline-home' %}" style="margin-top: 5px; margin-left: -23.5%; margin-bottom: 30px;">
+            {% csrf_token %}
+            <input type="text" name="jenkins_url">
+            <button type="submit" class="btn btn-primary" style="margin-left: 10%;">Generate from URL</button>
         </form>
     </div>
 
@@ -26,11 +33,12 @@
     <div class="datetime-form">
         <form method="GET">
             {% csrf_token %}
-            {{ form.date }} <br>
-            {{ form.time }}
+            {{ filter_form.date }} <br>
+            {{ filter_form.time }}
             <input type="submit"></input>
         </form>
     </div>
+
 </div>
 
 
@@ -55,18 +63,18 @@
                         <div class="timeline-step">
                             <div class="timeline-content">
 
-                                {% if log.type == 'RECEIVED' %}
+                                {% if log.type == 'RECEIVED' or log.type == 'CONF RECEIVED' %}
                                     {% for data in datas %}
                                         {% if data.log.ID == log.ID %}
                                             <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
-                                            <a href="javascript://" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> <br/> hostname: {{ data.hostname }} <br/> ip: {{ data.ip }} <br/> result: {{ data.result }} <br/> role: {{ data.role }}">
+                                            <a href="javascript://" data-toggle="popover" data-html="true" title="{{ log.dateTime|date:'Y-m-d H:i:s' }}" data-content="{{ log.hostname }} <br/> restLogger: {{ log.restLogger }} <br/> <br/> {{ log.type }}: {{ data.statusCode }} <br/> ip: {{ data.ip }} <br/> result: {{ data.data }}">
                                                 {% if data.statusCode > 400 and data.statusCode < 500 %}
                                                 <p class="h6 mt-1 mb-1" style="color: orange;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
                                                 {% endif %}
                                                 {% if data.statusCode > 500 %}
                                                 <p class="h6 mt-1 mb-1" style="color: red;">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
                                                 {% endif %}
-                                                {% if data.statusCode == 200 %}
+                                                {% if data.statusCode > 199 and data.statusCode < 300 %}
                                                 <p class="h6 mt-1 mb-1">{{ log.dateTime|date:'Y-m-d H:i:s.u' }}</p>
                                                 {% endif %}
                                             </a>
@@ -74,7 +82,7 @@
                                     {% endfor %}
                                 {% endif %}
                                 
-                                {% if log.type == 'SENT' %}
+                                {% if log.type == 'SENT' or log.type == 'CONF SENT' %}
                                     {% for request in requests %}
                                         {% if request.log.ID == log.ID %}
                                             <a href="{% url 'timeline-log' log.ID %}"><div class="inner-circle"></div></a>
@@ -101,3 +109,15 @@
 </div>
 
 {% endblock content %}
+
+{% block foot %}
+
+<!-- Delete timelines button -->
+<div>
+    <form method="post" action="{% url 'delete' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" style="float: right; margin-right: 10%; margin-bottom: 5%;">Delete timelines</button>
+    </form>
+</div>
+
+{% endblock foot %}

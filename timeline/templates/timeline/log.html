@@ -13,10 +13,10 @@
     <table class="table table-bordered">
         <tbody>
             
-            {% if log.type == 'RECEIVED' %}
+            {% if log.type == 'RECEIVED' or log.type == 'CONF RECEIVED' %}
                 
                 <tr>
-                    <td>{{ log.hostname }} RestLogger: {{ log.restLogger }}</td>
+                    <td>{{ log.hostname }} <b>RestLogger:</b> {{ log.restLogger }}</td>
                 </tr>
 
                 <tr>
@@ -24,31 +24,27 @@
                 </tr>
 
                 <tr>
-                    <td>hostname: {{ data.hostname }}  ip: {{ data.ip }}</td>
+                    <td><b>ip:</b> {{ data.ip }}</td>
                 </tr>
 
                 <tr>
-                    <td>result: {{ data.result }}    role: {{ data.role }}</td>
+                    <td><b>result:</b> {{ data.data }}</td>
                 </tr>                
 
             {% endif %}
 
-            {% if log.type == 'SENT' %}
+            {% if log.type == 'SENT' or log.type == 'CONF SENT' %}
                 
                 <tr>
-                    <td>{{ log.hostname }} RestLogger: {{ log.restLogger }}</td>
+                    <td>{{ log.hostname }} <b>RestLogger:</b> {{ log.restLogger }}</td>
                 </tr>
 
                 <tr>
-                    <td>{{ log.type }}: {{ request.requestType }}</td>
+                    <td>{{ log.type }}: {{ request.params }} {{ request.requestType }}</td>
                 </tr>
 
                 <tr>
-                    <td>request: {{ request.URL }}</td>
-                </tr>
-
-                <tr>
-                    <td>params: {{ request.params }}</td>
+                    <td><b>request:</b> {{ request.URL }}</td>
                 </tr>
                    
             {% endif %}

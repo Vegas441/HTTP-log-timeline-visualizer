@@ -29,56 +29,52 @@ def home(request):
         'logs': Log.objects.order_by('-dateTime').all(),
         'datas': Data.objects.all(),
         'requests': Request.objects.all(),
-        'form': DateTimeForm()
+        'filter_form': DateTimeForm()
     }
     try:
         # Load a fie
-        if request.method == 'POST':
+        if request.method == 'POST' and 'document' in request.FILES:
             uploaded_file = request.FILES['document']
             fs = FileSystemStorage()
             if fs.exists(uploaded_file.name):
                 fs.delete(uploaded_file.name)
             fs.save(uploaded_file.name, uploaded_file)
-            utils.file_process('./media/' + uploaded_file.name)
             context = {
                 'timelines': Timeline.objects.all(),
                 'logs': Log.objects.order_by('-dateTime').all(),
                 'datas': Data.objects.all(),
-                'requests': Request.objects.all()
+                'requests': Request.objects.all(),
+                'filter_form': DateTimeForm()
             }
             return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
         
+        # Load URL
+        elif request.method == 'POST' and 'jenkins_url' in request.POST:
+            url = request.POST['jenkins_url']
+            context = {
+                'timelines': Timeline.objects.all(),
+                'logs': Log.objects.order_by('-dateTime').all(),
+                'datas': Data.objects.all(),
+                'requests': Request.objects.all(),
+                'filter_form': DateTimeForm()
+            }
+            return render(request,'timeline/home.html', context) #TODO: funkcia na spracovanie dat z url
+
         # Filter by date and time 
         elif request.method == 'GET':
             form = DateTimeForm(request.GET)
             if form.is_valid():
-                context['form'] = form
+                context['filter_form'] = form
                 dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
                 #print(dateTimeLimit)    
                 context['logs'] = Log.objects.filter(dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"]).order_by('-dateTime')
-            return render(request, 'timeline/home.html', context, utils.log_process())
+            return render(request, 'timeline/home.html', context) #, utils.log_process())
+            
         else:
-            return render(request, 'timeline/home.html', context, utils.log_process())
+            return render(request, 'timeline/home.html', context) #, utils.log_process())
     except Exception as e:
         print(e)
         return render(request, 'timeline/connection_error.html')
-
-def home_file(request):
-    context = {
-        'timelines': Timeline.objects.all(),
-        'logs': Log.objects.order_by('-dateTime').all(),
-        'datas': Data.objects.all(),
-        'requests': Request.objects.all()
-    }
-    if request.method == 'POST':
-        try:
-            uploaded_file = request.FILES['document']
-            fs = FileSystemStorage()
-            fs.save(uploaded_file.name, uploaded_file)
-            utils.read_file(uploaded_file.name)
-            return render(request, 'timeline/home.html', context, utils.file_process('./media/' + uploaded_file.name))
-        except:
-            return render(request, 'timeline/connection_error.html')
 
 def log(request, id):   
     # Will be pulled from database
@@ -91,7 +87,7 @@ def log(request, id):
         'data': data_
     }
     try:
-        return render(request, 'timeline/log.html', context, utils.log_process())
+        return render(request, 'timeline/log.html', context)
     except:
         return render(request, 'timeline/connection_error.html')
 
@@ -121,10 +117,16 @@ def timeline(request, ip):
     }  
 
     try:
-        return render(request, 'timeline/timeline.html', context, utils.log_process())
+        return render(request, 'timeline/timeline.html', context)
     except Exception as e:
         print(e)
         return render(request, 'timeline/connection_error.html')
+    
+# Delete all elements from database
+def delete(request):
+    timelines = Timeline.objects.all()
+    timelines.delete()     
+    return render(request,'timeline/home.html')
 
 def not_found_handler(request, exception):
     return render(request, 'timeline/404.html')
