@@ -1,10 +1,9 @@
-from cmath import log10
 import jenkins
 import paramiko
 import re
 from collections import defaultdict
 from timeline.models import *
-import os
+import requests
 
 class datafetch:
     def __init__(self, username: str, password: str, url: str) -> None:
@@ -18,8 +17,8 @@ class datafetch:
         return connection.get_views()
     def get_all_jobs(self, connection: jenkins) -> list:
         return connection.get_all_jobs()
-    def get_all_nodes(self, connection: jenkins) -> list:
-        return connection.get_nodes()
+ 
+    
 
 def file_prep(line, temp_ip, temp_id, log_id):
     log = Log()
@@ -32,8 +31,6 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
     try:
         log_ID = (Log.objects.last().ID) + 1
-        print(Log.objects.last().type)
-        print(Log.objects.last().dateTime)
         rq_id = (Request.objects.last().ID) + 1
         data_id = (Data.objects.last().ID) + 1
     except Exception:
@@ -87,9 +84,6 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         rq.save()
 
-        print(tm.IP)
-        print(rq.ID, rq.requestType, rq.params, rq.URL, rq.log.dateTime, rq.log.ID)
-        print(log.ID, log.dateTime, log.type, log.restLogger, log.hostname)
         return ip
     else:
         #RESPONSE
@@ -118,9 +112,6 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         data.save()
 
-        print(tm.IP)
-        print(data.ID, data.statusCode, data.ip, data.data, data.log.dateTime, data.log.ID)
-        print(log.ID, log.dateTime, log.type, log.restLogger, log.hostname)
 
         return ip
 
@@ -184,3 +175,18 @@ def file_process(name):
             line = [i for i in line if i]
             if 'SENT:' in line or 'RECEIVED:' in line:
                 temp_ip = file_prep(line, temp_ip, temp_id, log_id)
+
+def link_file_process(url):
+    fetch = datafetch(url = url, username='', password='')
+    jenkins_client = fetch.setup_connection()
+    url = url + '/restlog'
+    try:
+        req = requests.Request(method='GET', url=url)
+    except:
+        exit(-1)
+    response = jenkins_client.jenkins_open(req)
+    f = open('media/newfile.txt', 'w')
+    f.write(response)
+    f.close()
+    file_process('media/newfile.txt')
+    
