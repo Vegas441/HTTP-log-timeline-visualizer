@@ -24,8 +24,8 @@
         <!-- URL field -->
         <form method="post" action="{% url 'timeline-home' %}" style="margin-top: 5px; margin-left: -23.5%; margin-bottom: 30px;">
             {% csrf_token %}
-            <input type="text" name="jenkins_url">
-            <button type="submit" class="btn btn-primary" style="margin-left: 10%;">Generate from URL</button>
+            <input type="text" name="jenkins_url" placeholder="http://15.44.717.401:5521/">
+            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="example: If restlog URL is http://15.44.717.401:5521/restlog, enter http://15.44.717.401:5521/" style="margin-left: 10%;">Generate from URL</button>
         </form>
     </div>
 
