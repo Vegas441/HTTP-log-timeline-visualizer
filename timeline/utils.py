@@ -1,7 +1,5 @@
 import jenkins
-import paramiko
 import re
-from collections import defaultdict
 from timeline.models import *
 import requests
 
@@ -13,12 +11,6 @@ class datafetch:
     def setup_connection(self) -> jenkins:
         jenkins_client = jenkins.Jenkins(self.url, username = self.username, password = self.password)
         return jenkins_client
-    def get_all_views(self, connection: jenkins) -> list:
-        return connection.get_views()
-    def get_all_jobs(self, connection: jenkins) -> list:
-        return connection.get_all_jobs()
- 
-    
 
 def file_prep(line, temp_ip, temp_id, log_id):
     log = Log()
@@ -50,14 +42,12 @@ def file_prep(line, temp_ip, temp_id, log_id):
         type = line[line.index(restlogger) + 1]
     type = re.sub(":", "", type)
 
-    
     if 'SENT:' in line:
         #REQUEST
         requestType = line[line.index('-X') + 1]
         params = '-X'
         URL = line[(line.index('-X') + 2):]
         URL = " ".join(URL)
-
 
         #TIMELINE
         ip = line[line.index(requestType) + 1]
@@ -112,55 +102,7 @@ def file_prep(line, temp_ip, temp_id, log_id):
 
         data.save()
 
-
         return ip
-
-
-
-# sets up connection with jenkins server, uses log_prep() function to create and return a dictionary
-# with processed log data
-def log_process():
-    host = "10.14.222.120"
-    port = 50022
-    username = "student"
-    password = "student!"
-
-    BuildNum = 0
-
-    fetch = datafetch(username, password, 'http://10.14.222.120:50088//')
-    jenkins_client = fetch.setup_connection()
-
-    next_bn = jenkins_client.get_job_info('math_test')['nextBuildNumber']
-    
-    for i in range(1,next_bn):
-        try:
-            res = jenkins_client.get_build_info('math_test', i)['result']
-        except:
-            continue
-        if "SUCCESS" in res:
-            BuildNum = i
-
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(host, port, username, password)
-
-    BuildNum = 21
-
-    stdin, stdout, stderr = ssh.exec_command("cd jenkins_home/jobs/math_test/builds/" + str(BuildNum) + "/archive; cat RESTlog.log")
-    lines = stdout.readlines()
-    ssh.close()
-
-    temp_ip = 0
-    temp_id = 1
-    log_id = 1
-    data = Timeline.objects.all()
-    data.delete()
-    for line in lines:
-        line = line.strip()
-        line = str(line).split(' ')
-        line = [i for i in line if i]
-        if 'SENT:' in line or 'RECEIVED:' in line:
-            temp_ip = file_prep(line, temp_ip, temp_id, log_id)
 
 def file_process(name):
     temp_ip = 0
@@ -178,11 +120,16 @@ def file_process(name):
 
 def link_file_process(url):
     fetch = datafetch(url = url, username='', password='')
-    jenkins_client = fetch.setup_connection()
+    try:
+        jenkins_client = fetch.setup_connection()
+    except:
+        print("Couldn't connect to jenkins server")
+        exit(-1)
     url = url + '/restlog'
     try:
         req = requests.Request(method='GET', url=url)
     except:
+        print("Couldn't fetch restlog from", url)
         exit(-1)
     response = jenkins_client.jenkins_open(req)
     f = open('media/newfile.txt', 'w')
