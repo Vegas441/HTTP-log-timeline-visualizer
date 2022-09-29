@@ -1,7 +1,7 @@
 # HTTP Log timeline Visualizer
 
 Task:
-Develop a web application, which will fetch log data, then create timelines ...
+Develop a web application, which will fetch log data, group requests and responses by ip and port, visualize them on timelines and order them by date and time.
 
 # Authors
 
