@@ -16,7 +16,6 @@ class DateTimeForm(forms.Form):
     # Add default date value from log 
     def_datetime = Log.objects.all().values('dateTime')
     def_datetime = def_datetime.first()['dateTime']
-    print(def_datetime)
     if def_datetime:
         def_date = datetime.datetime.strftime(def_datetime, "%Y-%m-%d")
         date = forms.DateField(widget=DatePickerInput, initial=def_date)
