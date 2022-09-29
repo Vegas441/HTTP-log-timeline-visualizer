@@ -41,8 +41,6 @@ class Data(models.Model):
     statusCode = models.IntegerField()
     ip = models.CharField(max_length=45)
     data = models.CharField(max_length=4096)
-    #role = models.CharField(max_length=64)
-    #hostname = models.CharField(max_length=64)
 
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
 
