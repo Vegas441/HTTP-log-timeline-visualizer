@@ -120,11 +120,16 @@ def file_process(name):
 
 def link_file_process(url):
     fetch = datafetch(url = url, username='', password='')
-    jenkins_client = fetch.setup_connection()
+    try:
+        jenkins_client = fetch.setup_connection()
+    except:
+        print("Couldn't connect to jenkins server")
+        exit(-1)
     url = url + '/restlog'
     try:
         req = requests.Request(method='GET', url=url)
     except:
+        print("Couldn't fetch restlog from", url)
         exit(-1)
     response = jenkins_client.jenkins_open(req)
     f = open('media/newfile.txt', 'w')
