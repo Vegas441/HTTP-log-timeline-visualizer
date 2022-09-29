@@ -58,7 +58,7 @@ def home(request):
                 'requests': Request.objects.all(),
                 'filter_form': DateTimeForm()
             }
-            return render(request,'timeline/home.html', context) #TODO: funkcia na spracovanie dat z url
+            return render(request,'timeline/home.html', context, utils.link_file_process(url))
 
         # Filter by date and time 
         elif request.method == 'GET':
