@@ -2,8 +2,6 @@ from django.db import models
 from django.forms import IntegerField
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-
 class Timeline(models.Model):
     IP = models.CharField(max_length=45, primary_key=True)
 

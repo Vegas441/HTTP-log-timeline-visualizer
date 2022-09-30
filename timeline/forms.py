@@ -5,11 +5,16 @@ from .models import Log
 import datetime
 
 class UploadFileFom(forms.Form):
+    '''
+    Form for file uploads
+    '''
     title = forms.CharField(max_length=100)
     file = forms.FileField()
 
 class DateTimeForm(forms.Form):
-
+    '''
+    Date time filter form
+    '''
     date = forms.DateField(widget=DatePickerInput, initial=datetime.date.today)
     time = forms.TimeField(widget=TimePickerInput)
 

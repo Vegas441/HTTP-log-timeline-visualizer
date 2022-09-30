@@ -43,7 +43,6 @@
 
 
 <div class="container">
-    <!-- For loop -->
     {% for timeline in timelines %}
         <div class="card border-dark mb-3" style="max-width: 180px; max-height: 50px;">
             <a style="color: white" href="{% url 'timeline-tm' timeline.IP %}">
@@ -103,8 +102,6 @@
                 </div>
             </div>
         </div>
-    
-    <!-- End loop -->
     {% endfor %}
 </div>
 

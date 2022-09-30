@@ -8,22 +8,11 @@ from django.core.files.storage import FileSystemStorage
 from .forms import DateTimeForm
 from datetime import datetime, tzinfo, timezone
  
-'''
-# This is an example context used in early phases of the project
-example_ctx = {
-    'time': '2022-07-04 07:14:29.523+01:00',
-    'type': 'RECIEVED',
-    'restLogger': '1139737886',
-    'hostname': 'DEBUG master_1 RID1139737886',
-    'status_code': '200',
-    'ip': '10.1.0.14:5620',
-    'result': '180',
-    'role': 'SLAVE',
-    'slave_hostname': 'slave_1'
-}
-'''
 
 def home(request):
+    '''
+    Home page 
+    '''
     context = {
         'timelines': Timeline.objects.all(),
         'logs': Log.objects.order_by('-dateTime').all(),
@@ -66,18 +55,19 @@ def home(request):
             if form.is_valid():
                 context['filter_form'] = form
                 dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
-                #print(dateTimeLimit)    
                 context['logs'] = Log.objects.filter(dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"]).order_by('-dateTime')
-            return render(request, 'timeline/home.html', context) #, utils.log_process())
+            return render(request, 'timeline/home.html', context)
             
         else:
-            return render(request, 'timeline/home.html', context) #, utils.log_process())
+            return render(request, 'timeline/home.html', context)
     except Exception as e:
         print(e)
         return render(request, 'timeline/connection_error.html')
 
 def log(request, id):   
-    # Will be pulled from database
+    '''
+    Log page
+    '''
     log_ = Log.objects.filter(ID=id).first()
     request_ = Request.objects.filter(log = log_).first()
     data_ = Data.objects.filter(log=log_).first()
@@ -92,6 +82,9 @@ def log(request, id):
         return render(request, 'timeline/connection_error.html')
 
 def timeline(request, ip):
+    '''
+    Vertical timeline page
+    '''
     timeline_ = Timeline.objects.filter(IP=ip).first()
     logs_ = Log.objects.filter(timeline=timeline_)
     requests_ = Request.objects.all()
@@ -99,11 +92,9 @@ def timeline(request, ip):
     
     # Filter by date and time 
     if request.method == 'GET':
-        #print('get')
         form = DateTimeForm(request.GET)
         if form.is_valid():
             dateTimeLimit = datetime.combine(form.cleaned_data['date'], form.cleaned_data['time'])
-            #print(dateTimeLimit)    
             logs_ = Log.objects.filter(timeline=timeline_, dateTime__range = [dateTimeLimit, "9999-12-31 23:59:59"])
         else: 
             form = DateTimeForm()
@@ -122,8 +113,11 @@ def timeline(request, ip):
         print(e)
         return render(request, 'timeline/connection_error.html')
     
-# Delete all elements from database
+
 def delete(request):
+    '''
+    Delete route | deletes timelines from database
+    '''
     timelines = Timeline.objects.all()
     timelines.delete()     
     return render(request,'timeline/home.html')

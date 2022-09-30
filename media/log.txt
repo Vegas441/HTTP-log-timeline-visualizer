@@ -1,8 +1,0 @@
-2022-07-01 13:27:38.181+01:00 DEBUG master_1 RID1136788768 RestLogger: 1136788768 SENT: -X POST http://10.1.0.13:5620/math/sum
-2022-07-01 13:27:38.200+01:00 DEBUG master_1 RID1136788768 RestLogger: 1136788768 RECEIVED: 200:{"data":{"hostname": "slave_3", "ip": "10.1.0.13", "result": 550, "role": "SLAVE"}}
-2022-07-01 13:27:38.200+01:00 DEBUG master_1 RID1134363929 RestLogger: 1134363929 SENT: -X POST http://10.1.0.12:5620/math/sum
-2022-07-01 13:27:38.214+01:00 DEBUG master_1 RID1134363929 RestLogger: 1134363929 RECEIVED: 200:{"data":{"hostname": "slave_2", "ip": "10.1.0.12", "result": 550, "role": "SLAVE"}}
-2022-07-01 13:27:38.214+01:00 DEBUG master_1 RID1135019285 RestLogger: 1135019285 SENT: -X POST http://10.1.0.11:5620/math/sum
-2022-07-01 13:27:38.230+01:00 DEBUG master_1 RID1135019285 RestLogger: 1135019285 RECEIVED: 200:{"data":{"hostname": "slave_1", "ip": "10.1.0.11", "result": 550, "role": "SLAVE"}}
-2022-07-01 13:27:38.231+01:00 DEBUG master_1 RID1135215898 RestLogger: 1135215898 SENT: -X POST http://10.1.0.14:5620/math/sum
-2022-07-01 13:27:38.246+01:00 DEBUG master_1 RID1135215898 RestLogger: 1135215898 RECEIVED: 200:{"data":{"hostname": "slave_4", "ip": "10.1.0.14", "result": 550, "role": "SLAVE"}}

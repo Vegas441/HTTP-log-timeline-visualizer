@@ -5,8 +5,11 @@ Develop a web application, which will fetch log data, group requests and respons
 
 # Authors
 
-David Svatý
+David Svatý |
 Lukáš Kaprál
+
+## Dependencies 
+Django 4.1.1, python-jenkins
 
 ## Usage
 
