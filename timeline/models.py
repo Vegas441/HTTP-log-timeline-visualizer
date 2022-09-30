@@ -2,8 +2,6 @@ from django.db import models
 from django.forms import IntegerField
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-
 class Timeline(models.Model):
     IP = models.CharField(max_length=45, primary_key=True)
 
@@ -41,8 +39,6 @@ class Data(models.Model):
     statusCode = models.IntegerField()
     ip = models.CharField(max_length=45)
     data = models.CharField(max_length=4096)
-    #role = models.CharField(max_length=64)
-    #hostname = models.CharField(max_length=64)
 
     log = models.ForeignKey(Log, on_delete=models.CASCADE)
 
